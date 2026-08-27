@@ -1,0 +1,18 @@
+---
+- name: Manage Docker Containers on Remote Host
+  hosts: docker_nodes
+  become: true  # Needed since you are interacting with the Docker daemon
+  tasks:
+
+    - name: Start the nginx_three container
+      community.docker.docker_container:
+        name: nginx_three
+        state: started
+
+    - name: Remove stopped containers (excluding nginx_three and running ones)
+      community.docker.docker_container:
+        name: "{{ item }}"
+        state: absent
+      loop:
+        - nginx
+        - sweet_elgamal

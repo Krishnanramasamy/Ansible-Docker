@@ -1,0 +1,15 @@
+---
+- name: Audit running containers
+  hosts: docker_nodes
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: Get information about containers
+      community.docker.docker_container_info:
+        name: nginx_two
+      register: result
+
+    - name: Print container status
+      ansible.builtin.debug:
+        var: result.container.State.Status
